@@ -48,7 +48,7 @@ func (s *Session) Authorize(provider goth.Provider, params goth.Params) (string,
 	if err != nil {
 		return "", err
 	}
-	v.Add("client_key", p.config.ClientID)
+	v.Add("client_id", p.config.ClientID)
 	v.Add("client_secret", p.config.ClientSecret)
 
 	req.URL.RawQuery = v.Encode()

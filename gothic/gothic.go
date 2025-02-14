@@ -22,6 +22,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/markbates/goth"
@@ -59,7 +60,7 @@ as either "provider" or ":provider".
 BeginAuthHandler will redirect the user to the appropriate authentication end-point
 for the requested provider.
 
-See https://github.com/markbates/goth/examples/main.go to see this in action.
+See https://github.com/markbates/goth/blob/master/examples/main.go to see this in action.
 */
 func BeginAuthHandler(res http.ResponseWriter, req *http.Request) {
 	url, err := GetAuthURL(res, req)
@@ -156,7 +157,7 @@ process and fetches all the basic information about the user from the provider.
 It expects to be able to get the name of the provider from the query parameters
 as either "provider" or ":provider".
 
-See https://github.com/markbates/goth/examples/main.go to see this in action.
+See https://github.com/markbates/goth/blob/master/examples/main.go to see this in action.
 */
 var CompleteUserAuth = func(res http.ResponseWriter, req *http.Request) (goth.User, error) {
 	if !keySet && defaultStore == Store {
@@ -279,6 +280,11 @@ func getProviderName(req *http.Request) (string, error) {
 
 	//  try to get it from the go-context's value of "provider" key
 	if p, ok := req.Context().Value("provider").(string); ok {
+		return p, nil
+	}
+
+	// try to get it from the url param "provider", when req is routed through 'chi'
+	if p := chi.URLParam(req, "provider"); p != "" {
 		return p, nil
 	}
 

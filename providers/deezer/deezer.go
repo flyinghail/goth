@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	"github.com/markbates/goth"
 	"golang.org/x/oauth2"
@@ -18,7 +19,7 @@ import (
 
 const (
 	authURL         string = "https://connect.deezer.com/oauth/auth.php"
-	tokenURL        string = "https://connect.deezer.com/oauth/access_token.php"
+	tokenURL        string = "https://connect.deezer.com/oauth/access_token.php?output=json"
 	endpointProfile string = "https://api.deezer.com/user/me"
 )
 
@@ -115,7 +116,7 @@ func (p *Provider) FetchUser(session goth.Session) (goth.User, error) {
 // *goth.User attributes
 func userFromReader(reader io.Reader, user *goth.User) error {
 	u := struct {
-		ID        string `json:"id"`
+		ID        int    `json:"id"`
 		Email     string `json:"email"`
 		FirstName string `json:"firstname"`
 		LastName  string `json:"lastname"`
@@ -129,7 +130,7 @@ func userFromReader(reader io.Reader, user *goth.User) error {
 		return err
 	}
 
-	user.UserID = u.ID
+	user.UserID = strconv.Itoa(u.ID)
 	user.Email = u.Email
 	user.FirstName = u.FirstName
 	user.LastName = u.LastName

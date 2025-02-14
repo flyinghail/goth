@@ -1,17 +1,16 @@
-package line_test
+package cognito
 
 import (
 	"testing"
 
 	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/line"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_Implements_Session(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
-	s := &line.Session{}
+	s := &Session{}
 
 	a.Implements((*goth.Session)(nil), s)
 }
@@ -19,7 +18,7 @@ func Test_Implements_Session(t *testing.T) {
 func Test_GetAuthURL(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
-	s := &line.Session{}
+	s := &Session{}
 
 	_, err := s.GetAuthURL()
 	a.Error(err)
@@ -33,16 +32,16 @@ func Test_GetAuthURL(t *testing.T) {
 func Test_ToJSON(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
-	s := &line.Session{}
+	s := &Session{}
 
 	data := s.Marshal()
-	a.Equal(data, `{"AuthURL":"","AccessToken":"","RefreshToken":"","ExpiresAt":"0001-01-01T00:00:00Z","IDToken":""}`)
+	a.Equal(data, `{"AuthURL":"","AccessToken":"","RefreshToken":"","ExpiresAt":"0001-01-01T00:00:00Z","UserID":""}`)
 }
 
 func Test_String(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
-	s := &line.Session{}
+	s := &Session{}
 
 	a.Equal(s.String(), s.Marshal())
 }

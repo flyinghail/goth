@@ -113,9 +113,9 @@ func main() {
 		eveonline.New(os.Getenv("EVEONLINE_KEY"), os.Getenv("EVEONLINE_SECRET"), "http://localhost:3000/auth/eveonline/callback"),
 		kakao.New(os.Getenv("KAKAO_KEY"), os.Getenv("KAKAO_SECRET"), "http://localhost:3000/auth/kakao/callback"),
 
-		// Pointed localhost.com to http://localhost:3000/auth/yahoo/callback through proxy as yahoo
-		// does not allow to put custom ports in redirection uri
-		yahoo.New(os.Getenv("YAHOO_KEY"), os.Getenv("YAHOO_SECRET"), "http://localhost.com"),
+		// Pointed https://localhost.com to http://localhost:3000/auth/yahoo/callback
+		// Yahoo only accepts urls that starts with https
+		yahoo.New(os.Getenv("YAHOO_KEY"), os.Getenv("YAHOO_SECRET"), "https://localhost.com"),
 		typetalk.New(os.Getenv("TYPETALK_KEY"), os.Getenv("TYPETALK_SECRET"), "http://localhost:3000/auth/typetalk/callback", "my"),
 		slack.New(os.Getenv("SLACK_KEY"), os.Getenv("SLACK_SECRET"), "http://localhost:3000/auth/slack/callback"),
 		stripe.New(os.Getenv("STRIPE_KEY"), os.Getenv("STRIPE_SECRET"), "http://localhost:3000/auth/stripe/callback"),
@@ -159,68 +159,68 @@ func main() {
 		goth.UseProviders(openidConnect)
 	}
 
-	m := make(map[string]string)
-	m["amazon"] = "Amazon"
-	m["apple"] = "Apple"
-	m["auth0"] = "Auth0"
-	m["azuread"] = "Azure AD"
-	m["battlenet"] = "Battlenet"
-	m["bitbucket"] = "Bitbucket"
-	m["box"] = "Box"
-	m["dailymotion"] = "Dailymotion"
-	m["deezer"] = "Deezer"
-	m["digitalocean"] = "Digital Ocean"
-	m["discord"] = "Discord"
-	m["dropbox"] = "Dropbox"
-	m["eveonline"] = "Eve Online"
-	m["facebook"] = "Facebook"
-	m["fitbit"] = "Fitbit"
-	m["gitea"] = "Gitea"
-	m["github"] = "Github"
-	m["gitlab"] = "Gitlab"
-	m["google"] = "Google"
-	m["gplus"] = "Google Plus"
-	m["heroku"] = "Heroku"
-	m["instagram"] = "Instagram"
-	m["intercom"] = "Intercom"
-	m["kakao"] = "Kakao"
-	m["lastfm"] = "Last FM"
-	m["line"] = "LINE"
-	m["linkedin"] = "Linkedin"
-	m["mastodon"] = "Mastodon"
-	m["meetup"] = "Meetup.com"
-	m["microsoftonline"] = "Microsoft Online"
-	m["naver"] = "Naver"
-	m["nextcloud"] = "NextCloud"
-	m["okta"] = "Okta"
-	m["onedrive"] = "Onedrive"
-	m["openid-connect"] = "OpenID Connect"
-	m["patreon"] = "Patreon"
-	m["paypal"] = "Paypal"
-	m["salesforce"] = "Salesforce"
-	m["seatalk"] = "SeaTalk"
-	m["shopify"] = "Shopify"
-	m["slack"] = "Slack"
-	m["soundcloud"] = "SoundCloud"
-	m["spotify"] = "Spotify"
-	m["steam"] = "Steam"
-	m["strava"] = "Strava"
-	m["stripe"] = "Stripe"
-	m["tiktok"] = "TikTok"
-	m["twitch"] = "Twitch"
-	m["twitter"] = "Twitter"
-	m["twitterv2"] = "Twitter"
-	m["typetalk"] = "Typetalk"
-	m["uber"] = "Uber"
-	m["vk"] = "VK"
-	m["wecom"] = "WeCom"
-	m["wepay"] = "Wepay"
-	m["xero"] = "Xero"
-	m["yahoo"] = "Yahoo"
-	m["yammer"] = "Yammer"
-	m["yandex"] = "Yandex"
-	m["zoom"] = "Zoom"
-
+	m := map[string]string{
+		"amazon":          "Amazon",
+		"apple":           "Apple",
+		"auth0":           "Auth0",
+		"azuread":         "Azure AD",
+		"battlenet":       "Battle.net",
+		"bitbucket":       "Bitbucket",
+		"box":             "Box",
+		"dailymotion":     "Dailymotion",
+		"deezer":          "Deezer",
+		"digitalocean":    "Digital Ocean",
+		"discord":         "Discord",
+		"dropbox":         "Dropbox",
+		"eveonline":       "Eve Online",
+		"facebook":        "Facebook",
+		"fitbit":          "Fitbit",
+		"gitea":           "Gitea",
+		"github":          "Github",
+		"gitlab":          "Gitlab",
+		"google":          "Google",
+		"gplus":           "Google Plus",
+		"heroku":          "Heroku",
+		"instagram":       "Instagram",
+		"intercom":        "Intercom",
+		"kakao":           "Kakao",
+		"lastfm":          "Last FM",
+		"line":            "LINE",
+		"linkedin":        "LinkedIn",
+		"mastodon":        "Mastodon",
+		"meetup":          "Meetup.com",
+		"microsoftonline": "Microsoft Online",
+		"naver":           "Naver",
+		"nextcloud":       "NextCloud",
+		"okta":            "Okta",
+		"onedrive":        "Onedrive",
+		"openid-connect":  "OpenID Connect",
+		"patreon":         "Patreon",
+		"paypal":          "Paypal",
+		"salesforce":      "Salesforce",
+		"seatalk":         "SeaTalk",
+		"shopify":         "Shopify",
+		"slack":           "Slack",
+		"soundcloud":      "SoundCloud",
+		"spotify":         "Spotify",
+		"steam":           "Steam",
+		"strava":          "Strava",
+		"stripe":          "Stripe",
+		"tiktok":          "TikTok",
+		"twitch":          "Twitch",
+		"twitter":         "Twitter",
+		"twitterv2":       "Twitter",
+		"typetalk":        "Typetalk",
+		"uber":            "Uber",
+		"vk":              "VK",
+		"wecom":           "WeCom",
+		"wepay":           "Wepay",
+		"xero":            "Xero",
+		"yahoo":           "Yahoo",
+		"yammer":          "Yammer",
+		"yandex":          "Yandex",
+		"zoom":            "Zoom",
+	}
 	var keys []string
 	for k := range m {
 		keys = append(keys, k)

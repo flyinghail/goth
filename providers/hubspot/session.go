@@ -1,24 +1,22 @@
-package google
+package hubspot
 
 import (
 	"encoding/json"
 	"errors"
-	"strings"
-	"time"
-
 	"github.com/markbates/goth"
+	"strings"
 )
 
-// Session stores data during the auth process with Google.
+// Session stores data during the auth process with Hubspot.
 type Session struct {
 	AuthURL      string
 	AccessToken  string
 	RefreshToken string
-	ExpiresAt    time.Time
-	IDToken      string
 }
 
-// GetAuthURL will return the URL set by calling the `BeginAuth` function on the Google provider.
+var _ goth.Session = &Session{}
+
+// GetAuthURL will return the URL set by calling the `BeginAuth` function on the Hubspot provider.
 func (s Session) GetAuthURL() (string, error) {
 	if s.AuthURL == "" {
 		return "", errors.New(goth.NoAuthUrlErrorMessage)
@@ -26,10 +24,11 @@ func (s Session) GetAuthURL() (string, error) {
 	return s.AuthURL, nil
 }
 
-// Authorize the session with Google and return the access token to be stored for future use.
+// Authorize the session with Hubspot and return the access token to be stored for future use.
 func (s *Session) Authorize(provider goth.Provider, params goth.Params) (string, error) {
 	p := provider.(*Provider)
 	token, err := p.config.Exchange(goth.ContextForClient(p.Client()), params.Get("code"))
+
 	if err != nil {
 		return "", err
 	}
@@ -40,10 +39,6 @@ func (s *Session) Authorize(provider goth.Provider, params goth.Params) (string,
 
 	s.AccessToken = token.AccessToken
 	s.RefreshToken = token.RefreshToken
-	s.ExpiresAt = token.Expiry
-	if idToken := token.Extra("id_token"); idToken != nil {
-		s.IDToken = idToken.(string)
-	}
 	return token.AccessToken, err
 }
 
@@ -57,9 +52,9 @@ func (s Session) String() string {
 	return s.Marshal()
 }
 
-// UnmarshalSession will unmarshal a JSON string into a session.
+// UnmarshalSession wil unmarshal a JSON string into a session.
 func (p *Provider) UnmarshalSession(data string) (goth.Session, error) {
-	sess := &Session{}
-	err := json.NewDecoder(strings.NewReader(data)).Decode(sess)
-	return sess, err
+	s := &Session{}
+	err := json.NewDecoder(strings.NewReader(data)).Decode(s)
+	return s, err
 }

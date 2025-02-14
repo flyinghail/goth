@@ -1,17 +1,17 @@
-package line_test
+package classlink_test
 
 import (
 	"testing"
 
 	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/line"
+	"github.com/markbates/goth/providers/classlink"
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_Implements_Session(t *testing.T) {
+func Test_ImplementsSession(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
-	s := &line.Session{}
+	s := &classlink.Session{}
 
 	a.Implements((*goth.Session)(nil), s)
 }
@@ -19,7 +19,7 @@ func Test_Implements_Session(t *testing.T) {
 func Test_GetAuthURL(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
-	s := &line.Session{}
+	s := &classlink.Session{}
 
 	_, err := s.GetAuthURL()
 	a.Error(err)
@@ -33,16 +33,16 @@ func Test_GetAuthURL(t *testing.T) {
 func Test_ToJSON(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
-	s := &line.Session{}
+	s := &classlink.Session{}
 
 	data := s.Marshal()
-	a.Equal(data, `{"AuthURL":"","AccessToken":"","RefreshToken":"","ExpiresAt":"0001-01-01T00:00:00Z","IDToken":""}`)
+	a.Equal(data, `{"AuthURL":"","AccessToken":"","RefreshToken":"","ExpiresAt":"0001-01-01T00:00:00Z"}`)
 }
 
 func Test_String(t *testing.T) {
 	t.Parallel()
 	a := assert.New(t)
-	s := &line.Session{}
+	s := &classlink.Session{}
 
 	a.Equal(s.String(), s.Marshal())
 }
